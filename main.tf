@@ -18,10 +18,10 @@ terraform {
 
 provider "azurerm" {
   features {}
-  //skip_provider_registration = true
+  skip_provider_registration = true
 
   //required since new version 
-  subscription_id                 = "9734ed68-621d-47ed-babd-269110dbacb1"
+  subscription_id                 = "2213e8b1-dbc7-4d54-8aff-b5e315df5e5b"
   //resource_provider_registrations = "none"
 }
 
@@ -32,7 +32,7 @@ resource "random_string" "uniquestring" {
 }
 
 resource "azurerm_resource_group" "rg" {
-  name     = "811-f125e5a3-provide-continuous-delivery-with-gith"
+  name     = "811-e7269e7e-provide-continuous-delivery-with-gith"
   location = "eastus"
 }
 
