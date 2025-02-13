@@ -8,12 +8,12 @@ terraform {
   }
 
   //value from https://app.terraform.io/app/Azure-CyberArk/workspaces/TerraformAzure
-  cloud { 
-    organization = "Azure-CyberArk" 
-    workspaces { 
-      name = "TerraformAzure" 
-    } 
-  } 
+  cloud {
+    organization = "Azure-CyberArk"
+    workspaces {
+      name = "TerraformAzure"
+    }
+  }
 }
 
 provider "azurerm" {
@@ -21,18 +21,18 @@ provider "azurerm" {
   skip_provider_registration = true
 
   //required since new version 
-  subscription_id                 = "9734ed68-621d-47ed-babd-269110dbacb1"
+  subscription_id = "28e1e42a-4438-4c30-9a5f-7d7b488fd883"
   //resource_provider_registrations = "none"
 }
 
 resource "random_string" "uniquestring" {
-  length           = 20
-  special          = false
-  upper            = false
+  length  = 20
+  special = false
+  upper   = false
 }
 
 resource "azurerm_resource_group" "rg" {
-  name     = "811-3d2fa5cc-provide-continuous-delivery-with-gith"
+  name     = "813-ed60d4cf-hands-on-with-terraform-on-azure"
   location = "eastus"
 }
 
