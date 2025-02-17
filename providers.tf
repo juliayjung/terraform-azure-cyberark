@@ -3,5 +3,5 @@ provider "azurerm" {
   skip_provider_registration = true
 
   //required since new version 
-  subscription_id                 = var.subscription_id
+  subscription_id = var.subscription_id
 }

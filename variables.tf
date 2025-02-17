@@ -1,19 +1,21 @@
 variable "resource_group_name" {
-  description = "Name of provided resource group"
-  type = string
+  description = "Name of provided resource group provided by the lab"
+  type        = string
+  nullable    = false
 }
 
 variable "location" {
   description = "the location of resourec group"
-  type = string
+  type        = string
   default     = "eastus"
 }
 
 variable "subscription_id" {
   description = "id of subscription which you can find from resource group"
-  type = string
+  type        = string
 }
 
+/*
 variable "cloud_org" {
   description = "The organization of terraform cloud"
   type        = string
@@ -25,3 +27,4 @@ variable "cloud_name" {
   type        = string
   default     = "TerraformAzureTest"
 }
+*/
