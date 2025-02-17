@@ -9,20 +9,11 @@ terraform {
 
   //value from https://app.terraform.io/app/Azure-CyberArk/workspaces/TerraformAzure
   cloud {
-    organization = "Azure-CyberArk"
+    organization = var.cloud_org
     workspaces {
-      name = "TerraformAzureTest"
+      name = var.cloud_name
     }
   }
-}
-
-provider "azurerm" {
-  features {}
-  //skip_provider_registration = true
-
-  //required since new version 
-  subscription_id                 = "0cfe2870-d256-4119-b0a3-16293ac11bdc"
-  resource_provider_registrations = "none"
 }
 
 resource "random_string" "uniquestring" {
@@ -32,8 +23,8 @@ resource "random_string" "uniquestring" {
 }
 
 resource "azurerm_resource_group" "rg" {
-  name     = "1-4f9249a1-playground-sandbox"
-  location = "southcentralus"
+  name     = var.resource_group_name 
+  location = var.location
 }
 
 resource "azurerm_storage_account" "storageaccount" {
