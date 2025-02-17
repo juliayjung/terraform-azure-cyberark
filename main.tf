@@ -21,7 +21,7 @@ provider "azurerm" {
   skip_provider_registration = true
 
   //required since new version 
-  subscription_id = "9734ed68-621d-47ed-babd-269110dbacb1"
+  subscription_id = "0cfe2870-d256-4119-b0a3-16293ac11bdc"
   //resource_provider_registrations = "none"
 }
 
@@ -32,7 +32,7 @@ resource "random_string" "uniquestring" {
 }
 
 resource "azurerm_resource_group" "rg" {
-  name     = "1-e257913a-playground-sandbox"
+  name     = "1-4f9249a1-playground-sandbox"
   location = "eastus"
 }
 
