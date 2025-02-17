@@ -14,14 +14,14 @@ variable "subscription_id" {
   type = string
 }
 
-variable "cloud_org" {
-  description = "The organization of terraform cloud"
-  type        = string
-  default     = "Azure-CyberArk"
-}
+# variable "cloud_org" {
+#   description = "The organization of terraform cloud"
+#   type        = string
+#   default     = "Azure-CyberArk"
+# }
 
-variable "cloud_name" {
-  description = "The name of terraform cloud which you can find from app.terraform.io"
-  type        = string
-  default     = "TerraformAzureTest"
-}
+# variable "cloud_name" {
+#   description = "The name of terraform cloud which you can find from app.terraform.io"
+#   type        = string
+#   default     = "TerraformAzureTest"
+# }
