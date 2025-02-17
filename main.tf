@@ -33,7 +33,7 @@ resource "random_string" "uniquestring" {
 
 resource "azurerm_resource_group" "rg" {
   name     = "1-4f9249a1-playground-sandbox"
-  location = "eastus"
+  location = "southcentralus"
 }
 
 resource "azurerm_storage_account" "storageaccount" {
