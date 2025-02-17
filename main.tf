@@ -9,9 +9,9 @@ terraform {
 
   //value from https://app.terraform.io/app/Azure-CyberArk/workspaces/TerraformAzure
   cloud {
-    organization = var.cloud_org
+    organization = "Azure-CyberArk"
     workspaces {
-      name = var.cloud_name
+      name = "TerraformAzureTest"
     }
   }
 }
