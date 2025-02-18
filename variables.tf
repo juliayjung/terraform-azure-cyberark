@@ -21,10 +21,10 @@ variable "cloud_org" {
   type        = string
   default     = "Azure-CyberArk"
 }
+*/
 
 variable "cloud_name" {
   description = "The name of terraform cloud which you can find from app.terraform.io"
   type        = string
   default     = "TerraformAzureTest"
 }
-*/
