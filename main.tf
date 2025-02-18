@@ -11,8 +11,7 @@ terraform {
   cloud {
     organization = "Azure-CyberArk"
     workspaces {
-      # name = "TerraformAzureTest"
-      name = var.cloud_name
+      name = "TerraformAzureTest"
     }
   }
 }
