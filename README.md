@@ -27,25 +27,25 @@ This is linked to [Git Hub repository](https://github.com/juliayjung/terraform-a
     terraform import azurerm_resource_group.rg [get resource ID from settings > properties]
     ```
 6.  git check out    (shift+control+p) to your branch \
-    staged changes > git commit > git push \
+    staged changes > git commit > git push 
 7.  Navigate to [Github Actions](https://github.com/juliayjung/terraform-azure-cyberark/actions) to review workflow, \
     Navigate to [Terraform Runs](https://app.terraform.io/app/Azure-CyberArk/workspaces/TerraformAzureTest/runs) to review, \
     Navigate to [Azure Portal](https://portal.azure.com/#home) to verify storage has been created
 
 ## Errors
 ###   Error Resource already managed by Terraform
-        terraform state list    ->verify if it already exists \
-            azurerm_resource_group.rg \
-        terraform state rm azurerm_resource_group.rg \
+        terraform state list    ->verify if it already exists 
+            azurerm_resource_group.rg 
+        terraform state rm azurerm_resource_group.rg 
 
 ###   Error publishing module. Validation failed: Name, Provider is invalid
-        Name of module must be in the format "terraform-<PROVIDER>-<NAME>" \
-        Make sure your github repository is named in this ie. terraform-azure-cyberark \
+        Name of module must be in the format "terraform-<PROVIDER>-<NAME>" 
+        Make sure your github repository is named in this ie. terraform-azure-cyberark 
 
 ###   Error reading the state of AzureRM Storage Account : Status=403 Code="AuthorizationFailed" the scope is invalid.
-        terraform state list    ->verify if it already exists, if so \
-            azurerm_storage_account.storageaccount \
-        terraform state rm azurerm_storage_account.storageaccount \
+        terraform state list    ->verify if it already exists, if so 
+            azurerm_storage_account.storageaccount 
+        terraform state rm azurerm_storage_account.storageaccount 
 
 > [!NOTE]
 > MD file syntax referred to https://docs.github.com/en/get-started/writing-on-github/getting-started-with-writing-and-formatting-on-github/basic-writing-and-formatting-syntax
