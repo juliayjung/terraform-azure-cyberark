@@ -24,7 +24,7 @@ resource "random_string" "uniquestring" {
 
 resource "azurerm_resource_group" "rg" {
   name     = var.resource_group_name
-  location = var.location
+  location = var.location_id
 }
 
 resource "azurerm_storage_account" "storageaccount" {
