@@ -35,13 +35,14 @@ This is linked to [Git Hub repository](https://github.com/juliayjung/terraform-a
 
 ## Errors
 ###   Error Resource already managed by Terraform
-        terraform state list    ->verify if it already exists 
+        terraform state list    ->verify if it already exists, if so 
             azurerm_resource_group.rg 
         terraform state rm azurerm_resource_group.rg 
+    don't forget to import azurerm_resource_group.rg after removing 
 
 ###   Error publishing module. Validation failed: Name, Provider is invalid
-        Name of module must be in the format "terraform-<PROVIDER>-<NAME>" 
-        Make sure your github repository is named in this ie. terraform-azure-cyberark 
+    Name of module must be in the format "terraform-<PROVIDER>-<NAME>" 
+    Make sure your github repository is named in this ie. terraform-azure-cyberark 
 
 ###   Error reading the state of AzureRM Storage Account : Status=403 Code="AuthorizationFailed" the scope is invalid.
         terraform state list    ->verify if it already exists, if so 
