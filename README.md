@@ -28,7 +28,8 @@ This is linked to [Git Hub repository](https://github.com/juliayjung/terraform-a
     ```
 6.  git check out    (shift+control+p) to your branch \
     staged changes > git commit > git push 
-7.  Navigate to [Github Actions](https://github.com/juliayjung/terraform-azure-cyberark/actions) to review workflow, \
+7.  create pull request > merge into main branch    <- This will run action automatically
+8.  Navigate to [Github Actions](https://github.com/juliayjung/terraform-azure-cyberark/actions) to review workflow, \
     Navigate to [Terraform Runs](https://app.terraform.io/app/Azure-CyberArk/workspaces/TerraformAzureTest/runs) to review, \
     Navigate to [Azure Portal](https://portal.azure.com/#home) to verify storage has been created
 
