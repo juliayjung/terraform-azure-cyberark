@@ -1,3 +1,3 @@
-resource_group_name = "1-336834be-playground-sandbox"
-subscription_id     = "80ea84e8-afce-4851-928a-9e2219724c69"
+resource_group_name = "1-c3af193d-playground-sandbox"
+subscription_id     = "0cfe2870-d256-4119-b0a3-16293ac11bdc"
 location_id         = "westus"
