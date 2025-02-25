@@ -23,7 +23,7 @@ This is linked to [Git Hub repository](https://github.com/juliayjung/terraform-a
     ```
     az login --use-device-code      -> enter code and login using azure username and pwd
     terraform login                 -> generate Token > copy value and paste by clicking mouse right button
-    terraform init -upgrade
+    terraform init [-upgrade]       
     terraform state list            -> make sure there is no resource_group.rg and storageaccount are listed
     terraform import azurerm_resource_group.rg [get resource ID from settings > properties]
     ```
