@@ -10,7 +10,7 @@ This is linked to [Git Hub repository](https://github.com/juliayjung/terraform-a
 1.  Login to [Azure portal](portal.azure.com) using by account username and password
 2.  Check if Terraform cloud name is correct 
     *ie.* Azure-CyberArk is **cloud organization** and TerraformAzureTest is **cloud name** 
-3.  Navigate to [Workspace > Variables](https://app.terraform.io/app/Azure-CyberArk/workspaces/TerraformAzureTest/variables)
+3.  Navigate to [Workspace > Variables](https://app.terraform.io/app/Azure-CyberArk/workspaces/TerraformAzureTest/variables) and login with HCP account > Github
     and apply values as below
     ```
     ARM_CLIENT_ID = Application Client ID
