@@ -5,4 +5,3 @@ provider "azurerm" {
   //required since new version 
   subscription_id = var.subscription_id
 }
-
