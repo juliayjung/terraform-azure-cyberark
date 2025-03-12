@@ -14,7 +14,7 @@ This is linked to [Git Hub repository](https://github.com/juliayjung/terraform-a
     and apply values as below
     ```
     ARM_CLIENT_ID = Application Client ID
-    ARM_CLIENT_SECRET = Secret
+    ARM_CLIENT_SECRET = Secret value (not secret ID)
     ARM_SUBSCRIPTION_ID = Azure Portal > Resource group > Subscription ID
     ARM_TENANT_ID = Azure Portal > Microsoft Entra ID > Tenant ID
     ```
