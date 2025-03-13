@@ -17,7 +17,7 @@ resource "azurerm_resource_group" "rg" {
 }
 
 resource "azurerm_storage_account" "storageaccount" {
-  name                     = "stg${random_string.uniquestring.result}"
+  name                     = "strg${random_string.uniquestring.result}"
   resource_group_name      = azurerm_resource_group.rg.name
   location                 = azurerm_resource_group.rg.location
   account_tier             = "Standard"
