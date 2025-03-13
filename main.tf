@@ -7,6 +7,13 @@ resource "random_string" "uniquestring" {
 resource "azurerm_resource_group" "rg" {
   name     = var.resource_group_name
   location = var.location_id
+
+  //3 tags are required
+  tags = {
+    Owner      = "Jung, Julia"
+    Department = "dsoa"
+    Project    = "cyberark-terraform"
+  }
 }
 
 resource "azurerm_storage_account" "storageaccount" {
