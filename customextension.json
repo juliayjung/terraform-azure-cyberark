@@ -1,0 +1,205 @@
+{
+    "$schema": "https://schema.management.azure.com/schemas/2015-01-01/deploymentTemplate.json#",
+    "contentVersion": "1.0.0.0",
+    "parameters" : {
+        "newStorageAccountName": {
+            "type": "string"
+        },
+        "dnsNameForPublicIP" : {
+            "type" : "string"
+        },
+        "adminUserName": {
+            "type": "string"
+        },
+        "adminPassword": {
+            "type": "securestring"
+        },
+        "imagePublisher": {
+            "type": "string",
+            "defaultValue": "Canonical",
+            "metadata": {
+                 "description": "Image Publisher"
+            }
+        },
+        "imageOffer": {
+            "type": "string",
+            "defaultValue": "UbuntuServer",
+            "metadata": {
+                "description": "Image Offer"
+            }
+        },
+        "imageSKU": {
+            "type": "string",
+            "defaultValue": "16.04-LTS",
+            "metadata": {
+                "description": "Image SKU"
+            }
+        },
+        "location": {
+            "type": "string",
+            "defaultValue" : "canadacentral",
+            "allowedValues": ["East US", "West US", "West Europe", "East Asia", "South East Asia", "canadacentral"],
+            "metadata": {
+                "description": "Deployment location"
+            }
+        },
+        "vmSize": {
+            "type": "string",
+            "defaultValue": "Standard_B1s"
+        },
+        "publicIPAddressName": {
+            "type": "string",
+            "defaultValue" : "terraweb-publicIP"
+        },
+        "vmName": {
+            "type": "string",
+            "defaultValue" : "vm-terrazure"
+        },
+        "vmComputerName": {
+            "type": "string",
+            "defaultValue" : "vmterrazure"
+        },
+        "virtualNetworkName":{
+            "type" : "string",
+            "defaultValue" : "vnet-dsoa-cyberark-terraform-lab-cc"
+        },
+        "nicName":{
+            "type" : "string",
+            "defaultValue":"terrazure-nic"
+        }
+    },
+    "variables": {
+        "addressPrefix":"10.149.0.0/16",
+        "subnet1Name": "default",
+        "subnet2Name": "test",
+        "subnet1Prefix" : "10.149.0.0/22",
+        "subnet2Prefix" : "10.149.4.0/24",
+        "vmStorageAccountContainerName": "bootdiagnostics-vmterrazu-7515d557-83a2-416c-b45a-9da217770450",
+        "publicIPAddressType" : "Static",
+        "storageAccountType": "Standard_LRS",
+		"subnet2Ref" : "[concat(variables('vnetID'),'/subnets/',variables('subnet2Name'))]",
+        "vnetID":"[resourceId('Microsoft.Network/virtualNetworks',parameters('virtualNetworkName'))]"
+    },
+    "resources": [
+    {
+      "type": "Microsoft.Storage/storageAccounts",
+      "name": "[parameters('newStorageAccountName')]",
+      "apiVersion": "2022-05-01",
+      "location": "[parameters('location')]",
+      "properties": {
+        "accountType": "[variables('storageAccountType')]"
+      }
+    },
+    {
+        "apiVersion": "2022-05-01",
+        "type": "Microsoft.Network/publicIPAddresses",
+        "name": "[parameters('publicIPAddressName')]",
+        "location": "[parameters('location')]",
+        "properties": {
+            "publicIPAllocationMethod": "[variables('publicIPAddressType')]",
+            "dnsSettings": {
+                "domainNameLabel": "[parameters('dnsNameForPublicIP')]"
+            }
+        },
+		"sku": {
+			"name": "Standard",
+			"tier": "Regional"
+		}
+    },
+    {
+      "apiVersion": "2024-01-01",
+      "type": "Microsoft.Network/virtualNetworks",
+      "name": "[parameters('virtualNetworkName')]",
+      "location": "[parameters('location')]",
+      "properties": {
+        "addressSpace": {
+          "addressPrefixes": [
+            "[variables('addressPrefix')]"
+          ]
+        },
+        "subnets": [
+          {
+            "name": "[variables('subnet1Name')]",
+            "properties" : {
+                "addressPrefix": "[variables('subnet1Prefix')]"
+            }
+          },
+          {
+            "name": "[variables('subnet2Name')]",
+            "properties" : {
+                "addressPrefix": "[variables('subnet2Prefix')]"
+            }
+          }
+        ]
+      }
+    },
+    {
+        "apiVersion": "2023-11-01",
+        "type": "Microsoft.Network/networkInterfaces",
+        "name": "[parameters('nicName')]",
+        "location": "[parameters('location')]",
+        "dependsOn": [
+            "[concat('Microsoft.Network/publicIPAddresses/', parameters('publicIPAddressName'))]",
+            "[concat('Microsoft.Network/virtualNetworks/', parameters('virtualNetworkName'))]"
+        ],
+        "properties": {
+            "ipConfigurations": [
+            {
+                "name": "test",
+                "properties": {
+                    "privateIPAllocationMethod": "Dynamic",
+                    "subnet": {
+                        "id": "[variables('subnet2Ref')]"
+                    },
+					"provisioningState": "Succeeded",
+                    "privateIPAddress": "10.149.4.91",
+                    "primary": true,
+                    "privateIPAddressVersion": "IPv4"
+                }
+            }
+            ]
+        }
+    },
+    {
+        "apiVersion": "2021-03-01",
+        "type": "Microsoft.Compute/virtualMachines",
+        "name": "[parameters('vmName')]",
+        "location": "[parameters('location')]",
+        "dependsOn": [
+            "[concat('Microsoft.Storage/storageAccounts/', parameters('newStorageAccountName'))]",
+            "[concat('Microsoft.Network/networkInterfaces/', parameters('nicName'))]"
+        ],
+        "properties": {
+            "hardwareProfile": {
+                "vmSize": "[parameters('vmSize')]"
+            },
+            "osProfile": {
+                "computername": "[parameters('vmComputerName')]",
+                "adminUsername": "[parameters('adminUsername')]",
+                "adminPassword": "[parameters('adminPassword')]"
+            },
+            "storageProfile": {
+              "imageReference": {
+                                  "publisher": "[parameters('imagePublisher')]",
+                                  "offer": "[parameters('imageOffer')]",
+                                  "sku" : "[parameters('imageSKU')]",
+                                  "version":"latest"
+                              },
+                "osDisk" : {
+                                    "name": "osdisk1",
+                                    "caching": "ReadWrite",
+                                    "createOption": "FromImage"
+                                }
+
+            },
+            "networkProfile": {
+                "networkInterfaces" : [
+                {
+                    "id": "[resourceId('Microsoft.Network/networkInterfaces',parameters('nicName'))]"
+                }
+                ]
+            }
+        }
+    }
+    ]
+}

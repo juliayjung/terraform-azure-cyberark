@@ -8,6 +8,7 @@ variable "resource_group_name" {
 variable "subscription_id" {
   description = "id of subscription from resource group"
   type        = string
+  default     = "13e3da75-e81b-4d8f-a621-c2e5534597fb"
 }
 
 
@@ -24,35 +25,21 @@ variable "vnet_name" {
 }
 
 variable "subnet_name" {
-  description = "Name of the subnet to use in the Virtual Network. Defaults to app."
+  description = "Name of the subnet to use in the Virtual Network."
   type        = string
   default     = "default"
+}
+
+variable "storage_name" {
+  description = "Name of the storage account."
+  type        = string
+  default     = "strgterrazure"
 }
 
 variable "common_tags" {
   description = "Map of tags value from Azure portal > resource group > tags"
   type        = map(string)
 }
-
-/*
-variable "tags_owner" {
-  description = "the value from Azure portal > resource group > tags > Owner"
-  type        = string
-  default     = "Jung, Julia"
-}
-
-variable "tags_department" {
-  description = "the value from Azure portal > resource group > tags > Department"
-  type        = string
-  default     = "dsoa"
-}
-
-variable "tags_project" {
-  description = "the value from Azure portal > resource group > tags > Project"
-  type        = string
-  default     = "cyberark-terraform"
-}
-*/
 
 //Create and Configure an Azure load balancer
 variable "prefix" {
@@ -94,4 +81,10 @@ variable "admin_username" {
   description = "Admin username for virtual machine. Defaults to azureuser."
   type        = string
   default     = "azureuser"
+}
+
+variable "admin_password" {
+  description = "Admin password for virtual machine. Defaults to CyberArk2025."
+  type        = string
+  default     = "CyberArk2025"
 }
