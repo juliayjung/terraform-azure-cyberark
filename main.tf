@@ -1,9 +1,3 @@
-resource "random_string" "uniquestring" {
-  length  = 5
-  special = false
-  upper   = false
-}
-
 resource "azurerm_resource_group" "rg" {
   name     = var.resource_group_name
   location = var.location_id
@@ -13,43 +7,46 @@ resource "azurerm_resource_group" "rg" {
 }
 
 //This will create storage account in corresponding resource group
-resource "azurerm_storage_account" "storageaccount" {
-  name                     = "strterraform${random_string.uniquestring.result}"
+resource "azurerm_storage_account" "sa" {
+  name                     = var.storage_name
   resource_group_name      = azurerm_resource_group.rg.name
   location                 = azurerm_resource_group.rg.location
   account_tier             = "Standard"
   account_replication_type = "LRS"
+  tags                     = var.common_tags
+  blob_properties {
+    last_access_time_enabled = true
+  }
+}
+
+data "azurerm_virtual_network" "vnet" {
+  resource_group_name = azurerm_resource_group.rg.name
+  name                = var.vnet_name
+  //address_space       = ["10.149.0.0/16"]
+  //location            = azurerm_resource_group.rg.location
+  //tags                = var.common_tags
 }
 
 data "azurerm_subnet" "default" {
+  //address_prefixes     = ["10.149.0.0/22"]
   resource_group_name  = azurerm_resource_group.rg.name
   virtual_network_name = var.vnet_name
   name                 = var.subnet_name
 }
 
-//Create and Configure an Azure load balancer
-module "terraweb" {
-  source  = "Azure/loadbalancer/azurerm"
-  version = "4.4.0"
+/* new subnet already created by running this
+resource "azurerm_subnet" "test" {
+  address_prefixes     = ["10.149.4.0/24"]
+  name                 = "test"
+  resource_group_name  = azurerm_resource_group.rg.name
+  virtual_network_name = var.vnet_name
+}
+*/
 
-  resource_group_name = azurerm_resource_group.rg.name
-  location            = azurerm_resource_group.rg.location
-
-  type              = "public"
-  pip_sku           = "Standard"
-  allocation_method = "Static"
-  lb_sku            = "Standard"
-  prefix            = var.prefix
-
-
-  lb_port = {
-    http = ["80", "Tcp", "${var.application_port}"]
-  }
-
-  lb_probe = {
-    http = ["Http", "${var.application_port}", "/"]
-  }
-
+data "azurerm_subnet" "test" {
+  name                 = "test"
+  resource_group_name  = azurerm_resource_group.rg.name
+  virtual_network_name = var.vnet_name
 }
 
 //Create and Configure an Azure VM Scale Set
@@ -57,6 +54,7 @@ resource "azurerm_network_security_group" "vmss" {
   resource_group_name = azurerm_resource_group.rg.name
   location            = azurerm_resource_group.rg.location
   name                = "nsg-${var.prefix}-vmss"
+  tags                = var.common_tags
 }
 
 resource "azurerm_network_security_rule" "vmss" {
@@ -85,7 +83,7 @@ resource "azurerm_linux_virtual_machine_scale_set" "main" {
   sku                 = var.vm_size
   instances           = var.vmss_count
   admin_username      = var.admin_username
-
+  tags                = var.common_tags
   admin_ssh_key {
     username   = var.admin_username
     public_key = tls_private_key.ssh.public_key_openssh
@@ -103,6 +101,7 @@ resource "azurerm_linux_virtual_machine_scale_set" "main" {
     caching              = "ReadWrite"
   }
 
+  #Create NIC
   network_interface {
     name                      = "${var.prefix}-nic"
     network_security_group_id = azurerm_network_security_group.vmss.id
@@ -111,7 +110,7 @@ resource "azurerm_linux_virtual_machine_scale_set" "main" {
       name                                   = "primary"
       load_balancer_backend_address_pool_ids = [module.terraweb.azurerm_lb_backend_address_pool_id]
       primary                                = true
-      subnet_id                              = data.azurerm_subnet.default.id
+      subnet_id                              = data.azurerm_subnet.test.id
     }
   }
 
@@ -123,4 +122,87 @@ resource "azurerm_linux_virtual_machine_scale_set" "main" {
   }))
 
   depends_on = [module.terraweb]
+}
+
+//Create and Configure an Azure load balancer
+module "terraweb" {
+  source  = "Azure/loadbalancer/azurerm"
+  version = "4.4.0"
+
+  resource_group_name = azurerm_resource_group.rg.name
+  location            = azurerm_resource_group.rg.location
+
+  type              = "public"
+  pip_sku           = "Standard"
+  allocation_method = "Static"
+  lb_sku            = "Standard"
+  prefix            = var.prefix
+  tags              = var.common_tags
+
+  lb_port = {
+    http = ["80", "Tcp", "${var.application_port}"]
+  }
+
+  lb_probe = {
+    http = ["Http", "${var.application_port}", "/"]
+  }
+
+}
+
+data "azurerm_public_ip" "pip" {
+  name                = "terraweb-publicIP"
+  resource_group_name = azurerm_resource_group.rg.name
+}
+
+resource "azurerm_network_interface" "nic" {
+  name                = "terrazure-nic"
+  location            = azurerm_resource_group.rg.location
+  resource_group_name = azurerm_resource_group.rg.name
+  tags                = var.common_tags
+  ip_configuration {
+    name                          = "test"
+    subnet_id                     = data.azurerm_subnet.test.id
+    private_ip_address_allocation = "Dynamic"
+  }
+}
+
+#Create Virtual Machine
+resource "azurerm_virtual_machine" "vm" {
+  name                             = "vm-terrazure"
+  location                         = azurerm_resource_group.rg.location
+  resource_group_name              = azurerm_resource_group.rg.name
+  network_interface_ids            = [azurerm_network_interface.nic.id]
+  vm_size                          = "Standard_B1s"
+  delete_os_disk_on_termination    = true
+  delete_data_disks_on_termination = true
+
+  storage_image_reference {
+    publisher = "Canonical"
+    offer     = "UbuntuServer"
+    sku       = "16.04-LTS"
+    version   = "latest"
+  }
+
+  storage_os_disk {
+    name              = "osdisk1"
+    disk_size_gb      = "128"
+    caching           = "ReadWrite"
+    create_option     = "FromImage"
+    managed_disk_type = "Standard_LRS"
+  }
+
+  os_profile {
+    computer_name  = "vmterrazure"
+    admin_username = var.admin_username
+    admin_password = var.admin_password
+  }
+
+  os_profile_linux_config {
+    disable_password_authentication = false
+  }
+
+  boot_diagnostics {
+    enabled     = "true"
+    storage_uri = azurerm_storage_account.sa.primary_blob_endpoint
+  }
 }
