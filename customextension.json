@@ -74,7 +74,7 @@
         "subnet2Name": "test",
         "subnet1Prefix" : "10.149.0.0/22",
         "subnet2Prefix" : "10.149.4.0/24",
-        "vmStorageAccountContainerName": "bootdiagnostics-vmterrazu-7515d557-83a2-416c-b45a-9da217770450",
+        "vmStorageAccountContainerName": "scterray07",
         "publicIPAddressType" : "Static",
         "storageAccountType": "Standard_LRS",
 		"subnet2Ref" : "[concat(variables('vnetID'),'/subnets/',variables('subnet2Name'))]",
