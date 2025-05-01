@@ -219,7 +219,7 @@ resource "azurerm_virtual_machine" "vm" {
   }
 }//vm-terrazure
 
-//Create an AKS Cluster
+//Create an AKS Cluster and Deploy Flux CD Using Helm
 module "app" {
   source  = "Azure/aks/azurerm"
   version = "9.4.1"//"8.0.0"
