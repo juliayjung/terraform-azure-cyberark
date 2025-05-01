@@ -2,7 +2,7 @@
 
 ## Introduction 
 This is linked to [Git Hub repository](https://github.com/juliayjung/terraform-azure-cyberark)
-- Create infrastructure to create Azure storage in Resource Group
+- Create infrastructure to create storage account, network interface, network security group, public ip, virtual machine, virtual machine scale set, load balancer, kubernates service from given virtual network and subnets in Resource Group
 - Provide Continuous Delivery with GitHub and Terraform Cloud for Azure
 - release tag created by github / registry terraform
 
@@ -32,7 +32,20 @@ This is linked to [Git Hub repository](https://github.com/juliayjung/terraform-a
 7.  create pull request > merge into main branch    <- This will run action automatically
 8.  Navigate to [Github Actions](https://github.com/juliayjung/terraform-azure-cyberark/actions) to review workflow, \
     Navigate to [Terraform Runs](https://app.terraform.io/app/Azure-CyberArk/workspaces/TerraformAzureTest/runs) to review, \
-    Navigate to [Azure Portal](https://portal.azure.com/#home) to verify storage has been created
+    Navigate to [Azure Portal](https://portal.azure.com/#home) to verify storage account, network interface, network security group, public ip, virtual machine, virtual machine scale set, load balancer, kubernates service have been created
+
+## Import existing resources
+1.  Make sure aztfexport is installed (if not, [download aztfexport](https://github.com/Azure/aztfexport/releases) )
+2.  aztfexport rg “rg-dsoa-cyberark-terraform-lab-cc”
+3.  create variables for duplicated values and remove depends on
+4.  Run terraform plan to make sure no changes will be applied
+
+## Create Custom Script Extension for Windows
+1.  Resource group > Virtual Machine ie. vm-terrazure > Settings > Extensions + applications
+2.  Download Custom Script Extension from Github in https://learn.microsoft.com/en-us/azure/virtual-machines/extensions/custom-script-linux 
+3.  Azure Portal > search for Custom deployment >  Build your own template in the editor > apply our variables and default value of parameters > Save 
+    refer to customextension.json and https://github.com/cgi-dsoa/006_DevSecOps_CyberArk-Migration/issues/6 for screenshots
+4.  Next > validation is complete > Create > check resource group Deployments to show Succeeded
 
 ## Errors
 ###   Error Resource already managed by Terraform
