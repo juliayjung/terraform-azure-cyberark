@@ -2,7 +2,7 @@
 
 ## Introduction 
 This is linked to [Git Hub repository](https://github.com/juliayjung/terraform-azure-cyberark)
-- Create infrastructure to create storage account, network interface, network security group, public ip, virtual machine, virtual machine scale set, load balancer, kubernates service from given virtual network and subnets in Resource Group
+- Create infrastructure to create additional subnet, storage account, network interface, network security group, public ip, virtual machine, virtual machine scale set, load balancer, kubernates service from given virtual network and subnet in Resource Group
 - Provide Continuous Delivery with GitHub and Terraform Cloud for Azure
 - release tag created by github / registry terraform
 
