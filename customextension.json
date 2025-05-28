@@ -82,13 +82,17 @@
     },
     "resources": [
     {
-      "type": "Microsoft.Storage/storageAccounts",
-      "name": "[parameters('newStorageAccountName')]",
-      "apiVersion": "2022-05-01",
-      "location": "[parameters('location')]",
-      "properties": {
-        "accountType": "[variables('storageAccountType')]"
-      }
+        "type": "Microsoft.Storage/storageAccounts",
+        "name": "[parameters('newStorageAccountName')]",
+        "apiVersion": "2022-05-01",
+        "location": "[parameters('location')]",
+        "sku": {
+            "name": "[variables('storageAccountType')]",
+            "tier": "Standard"
+        },
+        "properties": {
+            "accountType": "[variables('storageAccountType')]"
+        }
     },
     {
         "apiVersion": "2022-05-01",
